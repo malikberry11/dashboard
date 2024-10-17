@@ -1,0 +1,181 @@
+/* Reset */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: sans-serif;
+}
+/* Elements */
+h1,
+h2 {
+  color: brown;
+}
+li {
+  list-style: none;
+  padding: 6px;
+  color: brown;
+  cursor: pointer;
+}
+
+/* app */
+#app {
+  width: 100%;
+  height: 100vh;
+  background-color: #f1f1f1;
+}
+#notification {
+  width: inherit;
+  background-color: #90ee906b;
+  padding: 10px 0 10px 10px;
+  margin-bottom: 10px;
+}
+/* date div */
+#date-div {
+  width: 100%;
+  font-size: 0.75em;
+  font-weight: bold;
+  padding: 8px 10px;
+}
+/* top bar */
+#top-bar {
+  width: 100%;
+  padding: 20px 8px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+#top-bar h3 {
+  letter-spacing: 1.2px;
+  font-size: 0.95em;
+  margin-right: 10px;
+}
+
+#top-bar span {
+  padding: 8px;
+  /* margin: 4px 8px 8px; */
+  background-color: black;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+#top-bar span:hover {
+  background-color: brown;
+}
+
+/* content */
+#content {
+  width: inherit;
+  height: inherit;
+}
+/* content display */
+.content-display {
+  width: inherit;
+  height: inherit;
+  display: flex;
+}
+.content-display aside {
+  width: 35%;
+  border-right: 1px solid #ccc;
+}
+.content-display aside h2 {
+  width: 100%;
+  padding: 10px 20px 10px 10px;
+  margin-bottom: 10px;
+  color: black;
+  border-bottom: 1px solid #ccc;
+}
+/*Header */
+.header {
+  padding-left: 4px;
+}
+.header nav {
+  font-size: 1.15em;
+  padding: 10px 20px 10px 0;
+}
+.header nav li {
+  padding: 8px;
+  letter-spacing: 1.5px;
+}
+.header nav li:hover {
+  background-color: #ddd;
+}
+/* Main */
+main {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  /* align-items: center; */
+}
+#data {
+  padding: 10px;
+}
+table {
+  width: 100%;
+}
+table,
+th,
+td {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+}
+tr:hover {
+  background-color: #f1f1f1;
+}
+table th {
+  width: 50%;
+  height: 50px;
+  text-align: left;
+  padding: 8px 0 8px 15px;
+}
+table td {
+  padding: 8px 15px;
+}
+/* Form */
+#inputs {
+  width: 80%;
+  padding-left: 8px;
+  margin: 10px 0;
+}
+#inputs span {
+  color: red;
+  font-size: 0.75em;
+}
+input:focus {
+  background-color: #ddd;
+  outline-color: #ddd;
+}
+label {
+  font-size: 0.85em;
+}
+input {
+  width: 70%;
+  margin: 4px 0;
+  padding: 6px 4px;
+}
+button {
+  width: 70%;
+  margin: 10px 0;
+  padding: 8px 0;
+  cursor: pointer;
+}
+button:hover {
+  background-color: brown;
+  color: white;
+  border: none;
+  border-color: brown;
+}
+
+/* Utility */
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
