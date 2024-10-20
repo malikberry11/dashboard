@@ -225,8 +225,18 @@ const handleSubmit = function (event) {
   const formData = new FormData(form)
   const formDataObject = {}
   formData.forEach((value, key) => (formDataObject[key] = value))
-  console.dir(formDataObject)
+  addNewMember(formDataObject)
   form.reset()
+}
+const addNewMember = (data) => {
+  const url = ''
+  fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
 }
 viewMembers.addEventListener('click', handleViewMembers)
 addMember.addEventListener('click', handleAddMembers)
