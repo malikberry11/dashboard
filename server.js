@@ -19,6 +19,7 @@ app.post('/update-data', async (req, res) => {
     const jsonData = JSON.parse(data)
     jsonData.push(req.body)
     console.log(jsonData)
+    await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2))
     res.json({ success: true, message: 'Data updated successfully' })
   } catch (error) {
     console.error('Error updating data:', error)
