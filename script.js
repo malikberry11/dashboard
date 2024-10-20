@@ -229,7 +229,7 @@ const handleSubmit = function (event) {
   form.reset()
 }
 const addNewMember = (data) => {
-  const url = ''
+  const url = 'http://localhost:3000/update-data'
   fetch(url, {
     method: 'POST',
     body: JSON.stringify(data),
