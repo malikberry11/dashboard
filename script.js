@@ -17,7 +17,7 @@
 1. Promise Creation: 
 Creating a promise that simulates fetching data
 */
-let fetchData = new Promise((resolve, reject) => {
+/* let fetchData = new Promise((resolve, reject) => {
   let dataDownloaded = true
 
   setTimeout(() => {
@@ -39,7 +39,7 @@ fetchData
     // This runs if the promise is rejected
     console.error(error)
   })
-
+ */
 /* 
 Async/Await 
 JavaScript introduced the async/await to make working with promises easier and more readable. Async/Await allows us to write asynchrous code that looks like traditional synchronus code, making it easier to read and understand
@@ -59,7 +59,7 @@ async function loadData() {
     console.error(error)
   }
 }
-loadData()
+//loadData()
 
 // Define an asynchronous function
 const getData = async (fn) => {
@@ -220,23 +220,40 @@ const handleViewMembers = function () {
 const handleAddMembers = function () {
   form.toggleAttribute('hidden')
 }
-const handleSubmit = function (event) {
+const handleSubmit = async function (event) {
   event.preventDefault()
   const formData = new FormData(form)
   const formDataObject = {}
   formData.forEach((value, key) => (formDataObject[key] = value))
-  addNewMember(formDataObject)
+  await addNewMember(formDataObject)
   form.reset()
 }
-const addNewMember = (data) => {
+const addNewMember = async (data) => {
   const url = 'http://localhost:3000/update-data'
-  fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }
+    // Check type of content to make sure its json
+    const contentType = response.headers.get('content-type')
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new TypeError("Oops, we haven't got JSON!")
+    }
+    const jsonObject = await response.json()
+    const message = jsonObject['message']
+    if (jsonObject['success']) {
+      addFlashNotification(message, 'success', 1000)
+    }
+  } catch (error) {
+    console.error(error.message)
+  }
 }
 viewMembers.addEventListener('click', handleViewMembers)
 addMember.addEventListener('click', handleAddMembers)
@@ -248,3 +265,27 @@ You can remove an event listeners using the
 removeEventListener() method
 */
 // addMember.removeEventListener('click', handleAddMembers)
+
+/* 
+4.3 Dynamically adding and removing an element in DOM
+after a set interval. 
+You can dynamically add or remove an element in DOM and then insert or remove it after a set time period using the DOM setTimeout() method. In this example we will create a notifiction system for our dashboard application. Currently we have a div element with id of "notification" which is removed from the DOM when the application loads. We will recreate this
+div element when the user adds a new member. 
+*/
+function addFlashNotification(message, type = 'info', duration = 5000) {
+  // Create the flash div
+  const app = document.getElementById('app')
+  const topBar = document.getElementById('top-bar')
+  const div = document.createElement('div')
+  div.className = `notifications ${type}`
+  div.textContent = message
+  // Insert notification
+  app.insertBefore(div, topBar)
+  // Remove notification
+  setTimeout(() => {
+    div.classList.add('fade-out')
+    setTimeout(() => {
+      app.removeChild(div)
+    }, 500)
+  }, duration)
+}
