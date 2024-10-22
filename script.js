@@ -225,6 +225,9 @@ const handleViewMembers = function () {
 }
 const handleAddMembers = function () {
   form.toggleAttribute('hidden')
+  if (!table.hasAttribute('hidden')) {
+    table.toggleAttribute('hidden')
+  }
 }
 const handleSubmit = async function (event) {
   event.preventDefault()
