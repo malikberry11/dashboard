@@ -216,6 +216,12 @@ const table = document.querySelector('table')
 
 const handleViewMembers = function () {
   table.toggleAttribute('hidden')
+  // if table is in view get new data and reload the browser
+  if (!table.hasAttribute('hidden')) {
+    getData(function () {
+      window.location.reload()
+    })
+  }
 }
 const handleAddMembers = function () {
   form.toggleAttribute('hidden')
@@ -249,7 +255,7 @@ const addNewMember = async (data) => {
     const jsonObject = await response.json()
     const message = jsonObject['message']
     if (jsonObject['success']) {
-      addFlashNotification(message, 'success', 1000)
+      addFlashNotification(message, 'success', 800)
     }
   } catch (error) {
     console.error(error.message)
