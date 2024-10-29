@@ -37,7 +37,7 @@ li {
   padding: 10px 0 10px 10px;
   margin-bottom: 10px;
   font-weight: bold;
-  transition: opacity 0.5 ease-in;
+  transition: opacity 800ms ease-in-out;
   z-index: 1000;
 }
 .notifications.success {

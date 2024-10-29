@@ -64,28 +64,28 @@ async function loadData() {
 // Define an asynchronous function
 const getData = async (fn) => {
   try {
-    const response = await fetch('data.json')
+    const response = await fetch("data.json")
     const data = await response.json()
     fn(data)
   } catch (error) {
-    console.error('Could not find file')
+    console.error("Could not find file")
   }
 }
 // Define the callback
 const displayData = (data) => {
   //console.log(data)
   const members = data.map((member) => {
-    const tr = document.createElement('tr')
+    const tr = document.createElement("tr")
     // Create the td
     for (prop in member) {
-      const td = document.createElement('td')
+      const td = document.createElement("td")
       td.textContent = member[prop]
       tr.appendChild(td)
     }
     return tr
   })
   // Add the members to DOM
-  const tbody = document.querySelector('tbody')
+  const tbody = document.querySelector("tbody")
   members.forEach((member) => {
     tbody.appendChild(member)
   })
@@ -119,28 +119,28 @@ For example before you can manipulate an element in the DOM you have to have acc
 Methods for finding elements in the DOM
 1.1 document.getElementById() - Retrieve the element with the specified id.
 */
-const app = document.getElementById('app')
+const app = document.getElementById("app")
 console.log(app)
 /* 
 1.2 document.getElementByClassName() - Retrieve a live HTMLCollection of all elements that match a given class name. 
 */
-const header = document.getElementsByClassName('header')
+const header = document.getElementsByClassName("header")
 console.log(header)
 
 /* 
 1.3. documemnt.getElementbyTagName() - Retrieve a live HTMLCollection with the specified tag name.  
 */
-const spantags = document.getElementsByTagName('span')
+const spantags = document.getElementsByTagName("span")
 console.log(spantags)
 /* 
 1.4. document.querySelector()- Retrieves the first element that matches a CSS selector
 */
-const main = document.querySelector('main')
+const main = document.querySelector("main")
 console.log(main)
 /* 
 1.5. document.querySelectorAll() - Returns a static NodeList of all elements matching a CSS selector
 */
-const menuItems = document.querySelectorAll('li')
+const menuItems = document.querySelectorAll("li")
 console.log(menuItems)
 
 /* 
@@ -148,9 +148,9 @@ console.log(menuItems)
 There are multiple ways to modify a DOM node's attributes, content and structure
 For example..change the color of the header
 */
-const heading = document.querySelector('h1')
-heading.style.color = 'brown'
-const footer = document.querySelector('footer')
+const heading = document.querySelector("h1")
+heading.style.color = "brown"
+const footer = document.querySelector("footer")
 
 /*
 2.1 Setting and retrieving attributes
@@ -161,16 +161,16 @@ There are two methods for setting and retrieving attributes
 const signIn = spantags[0],
   register = spantags[1]
 console.log(signIn, register)
-signIn.setAttribute('data', '0')
-register.setAttribute('data', '1')
+signIn.setAttribute("data", "0")
+register.setAttribute("data", "1")
 /* 
 3. Create, append and remove nodes 
 3.1 You can create new DOM nodes using document.createElement() but it doesn't add it to the document until you explicitly append it
 */
-const dateDiv = document.createElement('div')
-dateDiv.setAttribute('id', 'date-div')
+const dateDiv = document.createElement("div")
+dateDiv.setAttribute("id", "date-div")
 dateDiv.textContent = new Date().toDateString()
-const footerParagraph = document.createElement('p')
+const footerParagraph = document.createElement("p")
 const currentYear = new Date().getFullYear()
 footerParagraph.innerHTML = `<p>&#169; Copyright ${currentYear} TrippleX </p>`
 /* 
@@ -182,7 +182,7 @@ The insertBefore(newNode, referenceNode)inserts the new node before an existing 
 - newNode, the node to be inserted
 - refrenceNode, the node before which newNode is inserted
 */
-const topBar = document.querySelector('#top-bar')
+const topBar = document.querySelector("#top-bar")
 app.insertBefore(dateDiv, topBar)
 /* 
 3.3 Removing DOM Nodes
@@ -190,17 +190,17 @@ You can remove elements from the DOM using
 removeChild()or the newer remove() method
 - removeChild(child), removes a child node from the parent node. It takes one parameter which is the child node to remove. The syntax is parentNode.removeChild(child). For Example let's remove the first li element of the nav node. 
 */
-const nav = document.querySelector('nav')
+const nav = document.querySelector("nav")
 nav.removeChild(nav.firstElementChild)
 // Removing a node using the remove()method of the Node interface
-document.getElementById('notification').remove()
+document.getElementById("notification").remove()
 /* 
 3.4 Replacing DOM Nodes
 You can replace an existing node with another using the replaceChild() method of the node interface. The replaceChild(newNode, oldNode)takes two parameters. The first is the new element, and the other is the old element you want to replace. For example let's replace the heading h1 element with an h2 
 */
-const newHeading = document.createElement('h2')
-newHeading.textContent = 'Dashboard'
-const aside = document.querySelector('aside')
+const newHeading = document.createElement("h2")
+newHeading.textContent = "Dashboard"
+const aside = document.querySelector("aside")
 aside.replaceChild(newHeading, heading)
 
 /* 
@@ -209,24 +209,24 @@ JavaScript can dynamically attach event listeners to elements, allowing for inte
 
 4.1 addEventListener() - Adds an event listeners to an element, specifying the type of event e.g click, mouseover, and a callback function to execute when that event happens
 */
-const viewMembers = document.querySelector('#view-members')
-const addMember = document.querySelector('#add-member')
-const form = document.querySelector('#form-add-member')
-const table = document.querySelector('table')
+const viewMembers = document.querySelector("#view-members")
+const addMember = document.querySelector("#add-member")
+const form = document.querySelector("#form-add-member")
+const table = document.querySelector("table")
 
 const handleViewMembers = function () {
-  table.toggleAttribute('hidden')
+  table.toggleAttribute("hidden")
   // if table is in view get new data and reload the browser
-  if (!table.hasAttribute('hidden')) {
+  if (!table.hasAttribute("hidden")) {
     getData(function () {
       window.location.reload()
     })
   }
 }
 const handleAddMembers = function () {
-  form.toggleAttribute('hidden')
-  if (!table.hasAttribute('hidden')) {
-    table.toggleAttribute('hidden')
+  form.toggleAttribute("hidden")
+  if (!table.hasAttribute("hidden")) {
+    table.toggleAttribute("hidden")
   }
 }
 const handleSubmit = async function (event) {
@@ -238,35 +238,35 @@ const handleSubmit = async function (event) {
   form.reset()
 }
 const addNewMember = async (data) => {
-  const url = 'http://localhost:3000/update-data'
+  const url = "http://localhost:3000/update-data"
   try {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`)
     }
     // Check type of content to make sure its json
-    const contentType = response.headers.get('content-type')
-    if (!contentType || !contentType.includes('application/json')) {
+    const contentType = response.headers.get("content-type")
+    if (!contentType || !contentType.includes("application/json")) {
       throw new TypeError("Oops, we haven't got JSON!")
     }
     const jsonObject = await response.json()
-    const message = jsonObject['message']
-    if (jsonObject['success']) {
-      addFlashNotification(message, 'success', 800)
+    const message = jsonObject["message"]
+    if (jsonObject["success"]) {
+      addFlashNotification(message, "success", 800)
     }
   } catch (error) {
     console.error(error.message)
   }
 }
-viewMembers.addEventListener('click', handleViewMembers)
-addMember.addEventListener('click', handleAddMembers)
-form.addEventListener('submit', handleSubmit)
+viewMembers.addEventListener("click", handleViewMembers)
+addMember.addEventListener("click", handleAddMembers)
+form.addEventListener("submit", handleSubmit)
 
 /* 
 4.2 Removing Event Listerners
@@ -281,20 +281,25 @@ after a set interval.
 You can dynamically add or remove an element in DOM and then insert or remove it after a set time period using the DOM setTimeout() method. In this example we will create a notifiction system for our dashboard application. Currently we have a div element with id of "notification" which is removed from the DOM when the application loads. We will recreate this
 div element when the user adds a new member. 
 */
-function addFlashNotification(message, type = 'info', duration = 5000) {
+function addFlashNotification(message, type = "info", duration = 5000) {
   // Create the flash div
-  const app = document.getElementById('app')
-  const topBar = document.getElementById('top-bar')
-  const div = document.createElement('div')
+  const app = document.getElementById("app")
+  const topBar = document.getElementById("top-bar")
+  const div = document.createElement("div")
   div.className = `notifications ${type}`
   div.textContent = message
   // Insert notification
   app.insertBefore(div, topBar)
   // Remove notification
-  setTimeout(() => {
-    div.classList.add('fade-out')
-    setTimeout(() => {
-      app.removeChild(div)
-    }, 500)
-  }, duration)
+  removeNotification(div, duration)
+}
+async function removeNotification(div, duration) {
+  await sleep(duration)
+  div.classList.add("fade-out")
+  await sleep(duration / 2)
+  app.removeChild(div)
+}
+// Create a sleep function
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
