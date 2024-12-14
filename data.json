@@ -2,31 +2,13 @@
   {
     "name": "Babajide",
     "role": "Instructor",
-    "subject": "JavaScript"
+    "subject": "JavaScript",
+    "id": "HJswPV"
   },
   {
-    "name": "Malachi",
+    "name": "Tolulope",
     "role": "Student",
-    "subject": "JavaScript"
-  },
-  {
-    "name": "Ridwan",
-    "role": "Student",
-    "subject": "JavaScript"
-  },
-  {
-    "name": "Bolatito",
-    "role": "Student",
-    "subject": "CSS"
-  },
-  {
-    "name": "Oyinkasola",
-    "role": "Student",
-    "subject": "HTML"
-  },
-  {
-    "name": "Adenike",
-    "role": "Student",
-    "subject": "JavaScript"
+    "subject": "JavaScript",
+    "id": "jeCMWg"
   }
 ]

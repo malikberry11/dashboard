@@ -66,7 +66,7 @@ const getData = async (fn) => {
   try {
     const response = await fetch("data.json")
     const data = await response.json()
-    fn(data)
+    return fn(data)
   } catch (error) {
     console.error("Could not find file")
   }
@@ -89,7 +89,7 @@ const displayData = (data) => {
   members.forEach((member) => {
     tbody.appendChild(member)
   })
-  console.log(tbody)
+  //console.log(tbody)
 }
 getData(displayData)
 
@@ -245,7 +245,12 @@ function handleAddMembers() {
   table.setAttribute("hidden", true)
 }
 function handleUpdateMembers() {
-  makeTableFieldsEditable(table)
+  // ToDo check if data is not empty before calling makeTable...
+  getData(isData).then((result) => {
+    if (result) {
+      makeTableFieldsEditable(table)
+    }
+  })
   button.removeAttribute("hidden")
   if (table.hasAttribute("hidden")) {
     table.removeAttribute("hidden")
@@ -340,5 +345,9 @@ function makeTableFieldsEditable(table) {
   fields.forEach((field) => {
     field.contentEditable = true
   })
-  fields[0].focus() 
+  fields[0].focus()
+}
+function isData(data) {
+  if (data.length === 0) return false
+  return true
 }

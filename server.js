@@ -2,9 +2,15 @@ const express = require("express")
 const fs = require("fs").promises
 const cors = require("cors")
 const path = require("path")
+const ShortUniqueId = require("short-unique-id")
 
 const app = express()
 const port = 3000
+
+function generateUniqueId() {
+  const { randomUUID } = new ShortUniqueId()
+  return randomUUID()
+}
 
 app.use(cors())
 app.use(express.json())
@@ -17,8 +23,11 @@ app.post("/add-data", async (req, res) => {
     const dataPath = path.join(__dirname, "data.json")
     const data = await fs.readFile(dataPath, "utf8")
     const jsonData = JSON.parse(data)
+    const member = req.body
+    member.id = generateUniqueId()
     jsonData.push(req.body)
-    console.log(jsonData)
+
+    console.log(member)
     await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2))
     res.json({ success: true, message: "Data updated successfully" })
   } catch (error) {
