@@ -23,11 +23,9 @@ app.post("/add-data", async (req, res) => {
     const dataPath = path.join(__dirname, "data.json")
     const data = await fs.readFile(dataPath, "utf8")
     const jsonData = JSON.parse(data)
-    const member = req.body
-    member.id = generateUniqueId()
+    req.body.id = generateUniqueId()
     jsonData.push(req.body)
-
-    console.log(member)
+    console.log(jsonData)
     await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2))
     res.json({ success: true, message: "Data updated successfully" })
   } catch (error) {
