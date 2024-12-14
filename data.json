@@ -23,5 +23,10 @@
     "name": "Oyinkasola",
     "role": "Student",
     "subject": "HTML"
+  },
+  {
+    "name": "Adenike",
+    "role": "Student",
+    "subject": "JavaScript"
   }
 ]

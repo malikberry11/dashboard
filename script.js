@@ -204,32 +204,61 @@ const aside = document.querySelector("aside")
 aside.replaceChild(newHeading, heading)
 
 /* 
-4. Event Handling in the DOM 
+4.0 Event Handling in the DOM 
 JavaScript can dynamically attach event listeners to elements, allowing for interaction when a user clicks, hovers, or interact in various ways
 
 4.1 addEventListener() - Adds an event listeners to an element, specifying the type of event e.g click, mouseover, and a callback function to execute when that event happens
 */
 const viewMembers = document.querySelector("#view-members")
 const addMember = document.querySelector("#add-member")
+const updateMember = document.querySelector("#update-member")
 const form = document.querySelector("#form-add-member")
 const table = document.querySelector("table")
+const button = document.createElement("button")
+const tableContainer = document.getElementById("data")
+button.textContent = "Save"
+button.setAttribute("hidden", true)
+tableContainer.appendChild(button)
 
-const handleViewMembers = function () {
-  table.toggleAttribute("hidden")
+viewMembers.addEventListener("click", handleViewMembers)
+addMember.addEventListener("click", handleAddMembers)
+updateMember.addEventListener("click", handleUpdateMembers)
+form.addEventListener("submit", handleSubmit)
+
+/* 4.1.1 Writing Event Handler Functions */
+function handleViewMembers() {
+  //table.toggleAttribute("hidden")
   // if table is in view get new data and reload the browser
+  form.setAttribute("hidden", true)
+  table.removeAttribute("hidden")
   if (!table.hasAttribute("hidden")) {
     getData(function () {
       window.location.reload()
     })
+  } else {
+    button.setAttribute("hidden", true)
   }
 }
-const handleAddMembers = function () {
-  form.toggleAttribute("hidden")
-  if (!table.hasAttribute("hidden")) {
-    table.toggleAttribute("hidden")
+function handleAddMembers() {
+  form.removeAttribute("hidden")
+  button.setAttribute("hidden", true)
+  table.setAttribute("hidden", true)
+}
+function handleUpdateMembers() {
+  makeTableFieldsEditable(table)
+  button.removeAttribute("hidden")
+  if (table.hasAttribute("hidden")) {
+    table.removeAttribute("hidden")
+    // Todo: Implement editing
+  }
+  if (!form.hasAttribute("hidden")) {
+    form.setAttribute("hidden", true)
   }
 }
-const handleSubmit = async function (event) {
+function handleDeleteMembers() {
+  // Todo: Implement
+}
+async function handleSubmit(event) {
   event.preventDefault()
   const formData = new FormData(form)
   const formDataObject = {}
@@ -237,8 +266,8 @@ const handleSubmit = async function (event) {
   await addNewMember(formDataObject)
   form.reset()
 }
-const addNewMember = async (data) => {
-  const url = "http://localhost:3000/update-data"
+async function addNewMember(data) {
+  const url = "http://localhost:3000/add-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -264,9 +293,6 @@ const addNewMember = async (data) => {
     console.error(error.message)
   }
 }
-viewMembers.addEventListener("click", handleViewMembers)
-addMember.addEventListener("click", handleAddMembers)
-form.addEventListener("submit", handleSubmit)
 
 /* 
 4.2 Removing Event Listerners
@@ -276,7 +302,7 @@ removeEventListener() method
 // addMember.removeEventListener('click', handleAddMembers)
 
 /* 
-4.3 Dynamically adding and removing an element in DOM
+5.0 Dynamically adding and removing an element in DOM
 after a set interval. 
 You can dynamically add or remove an element in DOM and then insert or remove it after a set time period using the DOM setTimeout() method. In this example we will create a notifiction system for our dashboard application. Currently we have a div element with id of "notification" which is removed from the DOM when the application loads. We will recreate this
 div element when the user adds a new member. 
@@ -302,4 +328,17 @@ async function removeNotification(div, duration) {
 // Create a sleep function
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+/* 
+5.1 Making Elements in the DOM editable 
+You can make any element in the DOM editable by setting the contenteditable 
+to true on the element
+*/
+function makeTableFieldsEditable(table) {
+  const fields = table.querySelectorAll("td")
+  fields.forEach((field) => {
+    field.contentEditable = true
+  })
+  fields[0].focus() 
 }
