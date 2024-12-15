@@ -106,7 +106,7 @@ function handleAddMembers() {
 }
 function handleUpdateMembers() {
   const updatedData = []
-  function fn(obj) {
+  function updateFn(obj) {
     updatedData.push(obj)
   }
   // Manage table display
@@ -120,7 +120,7 @@ function handleUpdateMembers() {
   // Check if table is not empty before updating
   getData(isData).then((result) => {
     if (result) {
-      updateMembers(table, fn)
+      updateMembers(table, updateFn)
     }
   })
   update_button.addEventListener("click", (e) => console.log(updatedData))
