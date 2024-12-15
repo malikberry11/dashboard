@@ -89,7 +89,6 @@ const displayData = (data) => {
   members.forEach((member) => {
     tbody.appendChild(member)
   })
-  //console.log(tbody)
 }
 getData(displayData)
 
@@ -214,11 +213,12 @@ const addMember = document.querySelector("#add-member")
 const updateMember = document.querySelector("#update-member")
 const form = document.querySelector("#form-add-member")
 const table = document.querySelector("table")
-const button = document.createElement("button")
 const tableContainer = document.getElementById("data")
-button.textContent = "Save"
-button.setAttribute("hidden", true)
-tableContainer.appendChild(button)
+
+const update_button = document.createElement("button")
+update_button.textContent = "update"
+update_button.setAttribute("hidden", true)
+tableContainer.appendChild(update_button)
 
 viewMembers.addEventListener("click", handleViewMembers)
 addMember.addEventListener("click", handleAddMembers)
@@ -236,29 +236,35 @@ function handleViewMembers() {
       window.location.reload()
     })
   } else {
-    button.setAttribute("hidden", true)
+    update_button.setAttribute("hidden", true)
   }
 }
 function handleAddMembers() {
   form.removeAttribute("hidden")
-  button.setAttribute("hidden", true)
+  update_button.setAttribute("hidden", true)
   table.setAttribute("hidden", true)
 }
 function handleUpdateMembers() {
-  // ToDo check if data is not empty before calling makeTable...
-  getData(isData).then((result) => {
-    if (result) {
-      makeTableFieldsEditable(table)
-    }
-  })
-  button.removeAttribute("hidden")
+  const updatedData = []
+  function fn(obj) {
+    updatedData.push(obj)
+  }
+  // Manage table display
   if (table.hasAttribute("hidden")) {
     table.removeAttribute("hidden")
-    // Todo: Implement editing
   }
   if (!form.hasAttribute("hidden")) {
     form.setAttribute("hidden", true)
   }
+
+  // Check if table is not empty before updating
+  getData(isData).then((result) => {
+    if (result) {
+      updateMembers(table, fn)
+    }
+  })
+  update_button.addEventListener("click", (e) => console.log(updatedData))
+  update_button.removeAttribute("hidden")
 }
 function handleDeleteMembers() {
   // Todo: Implement
@@ -271,6 +277,8 @@ async function handleSubmit(event) {
   await addNewMember(formDataObject)
   form.reset()
 }
+
+//CRUD Functions
 async function addNewMember(data) {
   const url = "http://localhost:3000/add-data"
   try {
@@ -298,13 +306,31 @@ async function addNewMember(data) {
     console.error(error.message)
   }
 }
-
+function updateMembers(table, saveData) {
+  const rows = table.querySelectorAll("tr")
+  for (let row = 0; row < rows.length; row++) {
+    const fields = rows[row].childNodes
+    // Make all fields(td) editable except the id field
+    for (let i = 0; i < fields.length - 1; i++) {
+      fields[i].contentEditable = true
+      fields[i].addEventListener("mouseout", (e) => {
+        //Build data object
+        const updateDataObj = {}
+        updateDataObj.id =
+          rows[row].childNodes[rows[row].childNodes.length - 1].textContent
+        updateDataObj.index = i
+        updateDataObj.value = e.target.textContent
+        //Save data object
+        saveData(updateDataObj)
+      })
+    }
+  }
+}
 /* 
 4.2 Removing Event Listerners
 You can remove an event listeners using the 
 removeEventListener() method
 */
-// addMember.removeEventListener('click', handleAddMembers)
 
 /* 
 5.0 Dynamically adding and removing an element in DOM
@@ -340,13 +366,7 @@ function sleep(ms) {
 You can make any element in the DOM editable by setting the contenteditable 
 to true on the element
 */
-function makeTableFieldsEditable(table) {
-  const fields = table.querySelectorAll("td")
-  fields.forEach((field) => {
-    field.contentEditable = true
-  })
-  fields[0].focus()
-}
+
 function isData(data) {
   if (data.length === 0) return false
   return true
