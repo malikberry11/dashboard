@@ -35,6 +35,7 @@ app.post("/add-data", async (req, res) => {
 })
 app.post("/update-data", async () => {
   // Todo: Implement
+  console.log("Connected to server for update")
 })
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`)

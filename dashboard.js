@@ -123,7 +123,11 @@ function handleUpdateMembers() {
       updateMembers(table, updateFn)
     }
   })
-  update_button.addEventListener("click", (e) => console.log(updatedData))
+  update_button.addEventListener("click", (e) => {
+    console.log(updatedData)
+    // Todo - send data to server
+    saveMember(updatedData)
+  })
   update_button.removeAttribute("hidden")
 }
 function handleDeleteMembers() {
@@ -141,6 +145,33 @@ async function handleSubmit(event) {
 //CRUD Functions
 async function addNewMember(data) {
   const url = "http://localhost:3000/add-data"
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }
+    // Check type of content to make sure its json
+    const contentType = response.headers.get("content-type")
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new TypeError("Oops, we haven't got JSON!")
+    }
+    const jsonObject = await response.json()
+    const message = jsonObject["message"]
+    if (jsonObject["success"]) {
+      addFlashNotification(message, "success", 800)
+    }
+  } catch (error) {
+    console.error(error.message)
+  }
+}
+async function saveMember(data) {
+  const url = "http://localhost:3000/update-data"
   try {
     const response = await fetch(url, {
       method: "POST",
