@@ -55,7 +55,7 @@ app.post("/update-data", async (req, res) => {
         console.log("Invalid index")
       }
     }
-    console.log(jsonData)
+    console.log(req.body)
     await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2))
     res.json({ success: true, message: "Data updated successfully" })
   } catch (error) {
