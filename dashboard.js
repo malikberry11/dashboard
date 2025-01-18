@@ -10,7 +10,8 @@ const footer = document.querySelector("footer")
 const viewMembers = document.querySelector("#view-members")
 const addMember = document.querySelector("#add-member")
 const updateMember = document.querySelector("#update-member")
-const form = document.querySelector("#form-add-member")
+const deleteMember = document.querySelector("#delete-member")
+const addMemberForm = document.querySelector("#form-add-member")
 const table = document.querySelector("table")
 const tableContainer = document.getElementById("data")
 
@@ -83,13 +84,14 @@ tableContainer.appendChild(update_button)
 viewMembers.addEventListener("click", handleViewMembers)
 addMember.addEventListener("click", handleAddMembers)
 updateMember.addEventListener("click", handleUpdateMembers)
-form.addEventListener("submit", handleSubmit)
+deleteMember.addEventListener("click", (e) => deleteMembers(e))
+addMemberForm.addEventListener("submit", handleSubmit)
 
 //Event Handler Functions
 function handleViewMembers() {
   //table.toggleAttribute("hidden")
   // if table is in view get new data and reload the browser
-  form.setAttribute("hidden", true)
+  addMemberForm.setAttribute("hidden", true)
   table.removeAttribute("hidden")
   if (!table.hasAttribute("hidden")) {
     getData(function () {
@@ -100,9 +102,12 @@ function handleViewMembers() {
   }
 }
 function handleAddMembers() {
-  form.removeAttribute("hidden")
+  addMemberForm.removeAttribute("hidden")
   update_button.setAttribute("hidden", true)
   table.setAttribute("hidden", true)
+  //Manage Delete Form display
+  const delForm = document.querySelector("#deleteForm")
+  if (delForm) delForm.remove()
 }
 function handleUpdateMembers() {
   const updatedData = []
@@ -113,9 +118,12 @@ function handleUpdateMembers() {
   if (table.hasAttribute("hidden")) {
     table.removeAttribute("hidden")
   }
-  if (!form.hasAttribute("hidden")) {
-    form.setAttribute("hidden", true)
+  if (!addMemberForm.hasAttribute("hidden")) {
+    addMemberForm.setAttribute("hidden", true)
   }
+  //Manage Delete Form display
+  const delForm = document.querySelector("#deleteForm")
+  if (delForm) delForm.remove()
 
   // Check if table is not empty before updating
   getData(isData).then((result) => {
@@ -130,16 +138,13 @@ function handleUpdateMembers() {
   })
   update_button.removeAttribute("hidden")
 }
-function handleDeleteMembers() {
-  // Todo: Implement
-}
 async function handleSubmit(event) {
   event.preventDefault()
-  const formData = new FormData(form)
+  const formData = new FormData(addMemberForm)
   const formDataObject = {}
   formData.forEach((value, key) => (formDataObject[key] = value))
   await addNewMember(formDataObject)
-  form.reset()
+  addMemberForm.reset()
 }
 
 //CRUD Functions
@@ -197,6 +202,34 @@ async function saveMember(data) {
     console.error(error.message)
   }
 }
+async function delMemberById(data) {
+  const url = "http://localhost:3000/delete-data"
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }
+    // Check type of content to make sure its json
+    const contentType = response.headers.get("content-type")
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new TypeError("Oops, we haven't got JSON!")
+    }
+    const jsonObject = await response.json()
+    const message = jsonObject["message"]
+    if (jsonObject["success"]) {
+      addFlashNotification(message, "success", 800)
+    }
+  } catch (error) {
+    console.error(error.message)
+  }
+}
+
 function updateMembers(table, saveData) {
   const rows = table.querySelectorAll("tr")
   for (let row = 0; row < rows.length; row++) {
@@ -216,6 +249,30 @@ function updateMembers(table, saveData) {
       })
     }
   }
+}
+
+function deleteMembers(e) {
+  e.preventDefault()
+  // If form isn't already in the DOM
+  if (!document.querySelector("#delete")) {
+    // 1. Show the form
+    displayDeleteForm()
+  }
+
+  //2. Retrieve id
+  btn = document.querySelector("#deleteBtn")
+  btn.onclick = (e) => {
+    e.preventDefault()
+    const response = confirm("Are you sure you want to delete")
+    if (response) {
+      const input = document.querySelector("#deleteForm > input")
+      const memberId = input.value
+      input.value = ""
+      delMemberById({ id: memberId })
+    }
+  }
+
+  //3. Send to server
 }
 
 // Notification Feature
@@ -241,6 +298,19 @@ async function removeNotification(div, duration) {
 // Utility functions
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function displayDeleteForm() {
+  const form = document.createElement("form")
+  const button = document.createElement("button")
+  const input = document.createElement("input")
+  form.setAttribute("id", "deleteForm")
+  button.setAttribute("id", "deleteBtn")
+  input.placeholder = "Enter member id"
+  button.textContent = "Delete"
+  form.appendChild(input)
+  form.appendChild(button)
+  main.appendChild(form)
 }
 
 function isData(data) {
