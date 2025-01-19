@@ -14,6 +14,7 @@ const deleteMember = document.querySelector("#delete-member")
 const addMemberForm = document.querySelector("#form-add-member")
 const table = document.querySelector("table")
 const tableContainer = document.getElementById("data")
+let updatedData = ""
 
 document.getElementById("notification").remove()
 
@@ -110,8 +111,6 @@ function handleAddMembers() {
   const delForm = document.querySelector("#deleteForm")
   if (delForm) delForm.remove()
 }
-
-let updatedData = ""
 function handleUpdateMember() {
   if (updatedData !== "") {
     saveMember(updatedData)
@@ -120,7 +119,6 @@ function handleUpdateMember() {
     updatedData = data
   })
 }
-
 function handleDisplayUpdateTable() {
   // Manage table display
   if (table.hasAttribute("hidden")) {
@@ -272,10 +270,9 @@ function deleteMembers(e) {
       //3. Send to server
       delMemberById({ id: memberId })
     }
-    window.location.reload()
+    setTimeout(() => window.location.reload(), 1000)
   }
 }
-
 // Notification Feature
 function addFlashNotification(message, type = "info", duration = 5000) {
   // Create the flash div
@@ -295,7 +292,6 @@ async function removeNotification(div, duration) {
   await sleep(duration / 2)
   app.removeChild(div)
 }
-
 // Utility functions
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -312,7 +308,6 @@ function displayDeleteForm() {
   form.appendChild(button)
   main.appendChild(form)
 }
-
 function isData(data) {
   if (data.length === 0) return false
   return true

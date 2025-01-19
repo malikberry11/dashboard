@@ -11,6 +11,20 @@ function generateUniqueId() {
   const { randomUUID } = new ShortUniqueId()
   return randomUUID()
 }
+async function getdata() {
+  const dataPath = path.join(__dirname, "data.json")
+  const data = await fs.readFile(dataPath, "utf8")
+  const jsonData = JSON.parse(data)
+  return [jsonData, dataPath]
+}
+async function writeData(res, dataPath, data, message) {
+  await fs.writeFile(dataPath, JSON.stringify(data, null, 2))
+  res.json({ success: true, message: message })
+}
+function errorMsg(error, message) {
+  console.error(`${message}:`, error)
+  res.status(500).json({ success: false, message: message })
+}
 
 app.use(cors())
 app.use(express.json())
@@ -20,23 +34,18 @@ app.get("/", (req, res) => {
 })
 app.post("/add-data", async (req, res) => {
   try {
-    const dataPath = path.join(__dirname, "data.json")
-    const data = await fs.readFile(dataPath, "utf8")
-    const jsonData = JSON.parse(data)
+    const [jsonData, dataPath] = await getdata()
+    console.log(jsonData)
     req.body.id = generateUniqueId()
     jsonData.push(req.body)
-    await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2))
-    res.json({ success: true, message: "Data updated successfully" })
+    writeData(res, dataPath, jsonData, "Data added successfully")
   } catch (error) {
-    console.error("Error updating data:", error)
-    res.status(500).json({ success: false, message: "Error updating data" })
+    errorMsg(error, "Error updating data")
   }
 })
 app.post("/update-data", async (req, res) => {
   try {
-    const dataPath = path.join(__dirname, "data.json")
-    const data = await fs.readFile(dataPath, "utf8")
-    const jsonData = JSON.parse(data)
+    const [jsonData, dataPath] = await getdata()
     const index = jsonData.findIndex((item) => item.id === req.body.id)
     if (index === -1) {
       console.log("Data not found")
@@ -54,18 +63,14 @@ app.post("/update-data", async (req, res) => {
       }
     }
     console.log(req.body)
-    await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2))
-    res.json({ success: true, message: "Data updated successfully" })
+    writeData(res, dataPath, jsonData, "Data updated successfully")
   } catch (error) {
-    console.error("Error updating data:", error)
-    res.status(500).json({ success: false, message: "Error updating data" })
+    errorMsg(error, "Error updating data")
   }
 })
 app.post("/delete-data", async (req, res) => {
   try {
-    const dataPath = path.join(__dirname, "data.json")
-    const data = await fs.readFile(dataPath, "utf8")
-    const jsonData = JSON.parse(data)
+    const [jsonData, dataPath] = await getdata()
     let newJsonData = []
     const index = jsonData.findIndex((item) => item.id === req.body.id)
     if (index === -1) {
@@ -74,11 +79,9 @@ app.post("/delete-data", async (req, res) => {
     } else {
       newJsonData = jsonData.filter((data) => data.id !== req.body.id)
     }
-    await fs.writeFile(dataPath, JSON.stringify(newJsonData, null, 2))
-    res.json({ success: true, message: "Data deleted successfully" })
+    writeData(res, dataPath, newJsonData, "Data deleted successfully")
   } catch (error) {
-    console.error("Error updating data:", error)
-    res.status(500).json({ success: false, message: "Error updating data" })
+    errorMsg(error, "Error updating data")
   }
 })
 app.listen(port, () => {
