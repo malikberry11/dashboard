@@ -76,14 +76,15 @@ footer.appendChild(footerParagraph)
 
 // Update Button
 const update_button = document.createElement("button")
-update_button.textContent = "update"
+update_button.textContent = "Update"
 update_button.setAttribute("hidden", true)
 tableContainer.appendChild(update_button)
 
 // Event Listeners
 viewMembers.addEventListener("click", handleViewMembers)
 addMember.addEventListener("click", handleAddMembers)
-updateMember.addEventListener("click", handleUpdateMembers)
+updateMember.addEventListener("click", handleDisplayUpdateTable)
+update_button.addEventListener("click", handleUpdateMember)
 deleteMember.addEventListener("click", (e) => deleteMembers(e))
 addMemberForm.addEventListener("submit", handleSubmit)
 
@@ -109,11 +110,18 @@ function handleAddMembers() {
   const delForm = document.querySelector("#deleteForm")
   if (delForm) delForm.remove()
 }
-function handleUpdateMembers() {
-  const updatedData = []
-  function updateFn(obj) {
-    updatedData.push(obj)
+
+let updatedData = ""
+function handleUpdateMember() {
+  if (updatedData !== "") {
+    saveMember(updatedData)
   }
+  updateMembers(table, (data) => {
+    updatedData = data
+  })
+}
+
+function handleDisplayUpdateTable() {
   // Manage table display
   if (table.hasAttribute("hidden")) {
     table.removeAttribute("hidden")
@@ -124,18 +132,12 @@ function handleUpdateMembers() {
   //Manage Delete Form display
   const delForm = document.querySelector("#deleteForm")
   if (delForm) delForm.remove()
-
-  // Check if table is not empty before updating
-  getData(isData).then((result) => {
-    if (result) {
-      updateMembers(table, updateFn)
-    }
-  })
-  update_button.addEventListener("click", (e) => {
-    console.log(updatedData)
-    // Todo - send data to server
-    saveMember(updatedData)
-  })
+  //
+  // Setup update table and check if table is not empty before updating
+  const rows = table.querySelectorAll("tr")
+  if (rows.length > 1) {
+    handleUpdateMember()
+  }
   update_button.removeAttribute("hidden")
 }
 async function handleSubmit(event) {
@@ -229,36 +231,35 @@ async function delMemberById(data) {
     console.error(error.message)
   }
 }
-
-function updateMembers(table, saveData) {
+function updateMembers(table, updateFn = undefined) {
   const rows = table.querySelectorAll("tr")
+  let updateDataObj = {}
   for (let row = 0; row < rows.length; row++) {
     const fields = rows[row].childNodes
     // Make all fields(td) editable except the id field
     for (let i = 0; i < fields.length - 1; i++) {
       fields[i].contentEditable = true
-      fields[i].addEventListener("mouseout", (e) => {
+      fields[i].addEventListener("input", (e) => {
         //Build data object
-        const updateDataObj = {}
         updateDataObj.id =
           rows[row].childNodes[rows[row].childNodes.length - 1].textContent
         updateDataObj.index = i
         updateDataObj.value = e.target.textContent
         //Save data object
-        saveData(updateDataObj)
+        if (updateFn !== undefined) {
+          updateFn(updateDataObj)
+        }
       })
     }
   }
 }
-
 function deleteMembers(e) {
   e.preventDefault()
   // If form isn't already in the DOM
-  if (!document.querySelector("#delete")) {
+  if (!document.querySelector("#deleteForm")) {
     // 1. Show the form
     displayDeleteForm()
   }
-
   //2. Retrieve id
   btn = document.querySelector("#deleteBtn")
   btn.onclick = (e) => {
@@ -268,11 +269,11 @@ function deleteMembers(e) {
       const input = document.querySelector("#deleteForm > input")
       const memberId = input.value
       input.value = ""
+      //3. Send to server
       delMemberById({ id: memberId })
     }
+    window.location.reload()
   }
-
-  //3. Send to server
 }
 
 // Notification Feature
@@ -299,7 +300,6 @@ async function removeNotification(div, duration) {
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
-
 function displayDeleteForm() {
   const form = document.createElement("form")
   const button = document.createElement("button")

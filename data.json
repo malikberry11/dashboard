@@ -1,8 +1,20 @@
 [
   {
-    "name": "Vincent",
+    "name": "Babajide",
     "role": "Instructor",
-    "subject": "Javascript",
-    "id": "4Pw1L5"
+    "subject": "JavaScript",
+    "id": "5ZzlZs"
+  },
+  {
+    "name": "Ridwan",
+    "role": "Instructor",
+    "subject": "JavaScript",
+    "id": "95Uybc"
+  },
+  {
+    "name": "Malakai",
+    "role": "Student",
+    "subject": "JavaScript",
+    "id": "3OnGLW"
   }
 ]

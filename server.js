@@ -25,7 +25,6 @@ app.post("/add-data", async (req, res) => {
     const jsonData = JSON.parse(data)
     req.body.id = generateUniqueId()
     jsonData.push(req.body)
-    console.log(jsonData)
     await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2))
     res.json({ success: true, message: "Data updated successfully" })
   } catch (error) {
@@ -34,23 +33,22 @@ app.post("/add-data", async (req, res) => {
   }
 })
 app.post("/update-data", async (req, res) => {
-  // Todo: Implement
   try {
     const dataPath = path.join(__dirname, "data.json")
     const data = await fs.readFile(dataPath, "utf8")
     const jsonData = JSON.parse(data)
-    const index = jsonData.findIndex((item) => item.id === req.body[0].id)
+    const index = jsonData.findIndex((item) => item.id === req.body.id)
     if (index === -1) {
       console.log("Data not found")
       return res.status(404).json({ success: false, message: "Data not found" })
     } else {
       console.log("Data found")
-      if (req.body[0].index === 0) {
-        jsonData[index]["name"] = req.body[0].value
-      } else if (req.body[0].index === 1) {
-        jsonData["email"] = req.body[0].value
-      } else if (req.body[0].index === 2) {
-        jsonData["status"] = req.body[0].value
+      if (req.body.index === 0) {
+        jsonData[index]["name"] = req.body.value
+      } else if (req.body.index === 1) {
+        jsonData[index]["role"] = req.body.value
+      } else if (req.body.index === 2) {
+        jsonData[index]["subject"] = req.body.value
       } else {
         console.log("Invalid index")
       }
@@ -76,7 +74,6 @@ app.post("/delete-data", async (req, res) => {
     } else {
       newJsonData = jsonData.filter((data) => data.id !== req.body.id)
     }
-    //console.log(req.body)
     await fs.writeFile(dataPath, JSON.stringify(newJsonData, null, 2))
     res.json({ success: true, message: "Data deleted successfully" })
   } catch (error) {

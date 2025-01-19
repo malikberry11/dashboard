@@ -137,6 +137,9 @@ main {
 #data {
   padding: 10px;
 }
+#data > button {
+  width: 56.5%;
+}
 table {
   width: 100%;
 }
@@ -153,7 +156,7 @@ table th {
   width: 50%;
   height: 50px;
   text-align: left;
-  padding: 8px 0 8px 15px;
+  padding: 8px 15px;
 }
 table td {
   padding: 8px 15px;
@@ -167,6 +170,10 @@ table td {
 #inputs span {
   color: red;
   font-size: 0.75em;
+}
+#deleteForm {
+  padding-left: 8px;
+  width: 80%;
 }
 input:focus {
   background-color: #ddd;
