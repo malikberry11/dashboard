@@ -149,7 +149,7 @@ async function handleSubmit(event) {
 
 //CRUD Functions
 async function addNewMember(data) {
-  const url = "http://localhost:3000/add-data"
+  const url = "http://localhost:80/add-data"
   try {
     const response = await fetch(url, {
       method: "POST",
