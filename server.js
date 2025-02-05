@@ -4,7 +4,7 @@ const cors = require("cors")
 const path = require("path")
 
 const app = express()
-const port = 8085
+const port = 80
 
 const ShortUniqueId = require("short-unique-id")
 function generateUniqueId() {
