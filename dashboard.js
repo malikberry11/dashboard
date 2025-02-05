@@ -149,7 +149,7 @@ async function handleSubmit(event) {
 
 //CRUD Functions
 async function addNewMember(data) {
-  const url = "http://localhost:80/add-data"
+  const url = "http://localhost:8085/add-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -176,7 +176,7 @@ async function addNewMember(data) {
   }
 }
 async function saveMember(data) {
-  const url = "http://localhost:3000/update-data"
+  const url = "http://localhost:8085/update-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -203,7 +203,7 @@ async function saveMember(data) {
   }
 }
 async function delMemberById(data) {
-  const url = "http://localhost:3000/delete-data"
+  const url = "http://localhost:8085/delete-data"
   try {
     const response = await fetch(url, {
       method: "POST",
