@@ -4,7 +4,7 @@ const cors = require("cors")
 const path = require("path")
 
 const app = express()
-const port = 80
+const port = 3000
 
 const ShortUniqueId = require("short-unique-id")
 function generateUniqueId() {
@@ -26,11 +26,7 @@ function errorMsg(error, message) {
   res.status(500).json({ success: false, message: message })
 }
 
-var corsOptions = {
-  origin: `http://localhost:${port}`,
-}
-
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.json())
 
 app.get("/", (req, res) => {
