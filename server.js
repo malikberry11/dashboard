@@ -26,7 +26,7 @@ function errorMsg(error, message) {
   res.status(500).json({ success: false, message: message })
 }
 
-//app.use(cors())
+app.use(cors())
 app.use(express.json())
 
 app.get("/", (req, res) => {
