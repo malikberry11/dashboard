@@ -149,7 +149,7 @@ async function handleSubmit(event) {
 
 //CRUD Functions
 async function addNewMember(data) {
-  const url = "https://spyda247.github.io:3000/add-data"
+  const url = "http://localhost:3003/add-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -176,7 +176,7 @@ async function addNewMember(data) {
   }
 }
 async function saveMember(data) {
-  const url = "https://spyda247.github.io:3000/update-data"
+  const url = "http://localhost:3003/update-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -203,7 +203,7 @@ async function saveMember(data) {
   }
 }
 async function delMemberById(data) {
-  const url = "https://spyda247.github.io:3000/delete-data"
+  const url = "http://localhost:3003/delete-data"
   try {
     const response = await fetch(url, {
       method: "POST",
