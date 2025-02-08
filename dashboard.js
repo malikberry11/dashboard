@@ -20,12 +20,13 @@ document.getElementById("notification").remove()
 
 // Data Functions
 const getData = async (fn) => {
+  const url = "http://localhost:3003/get-data"
   try {
-    const response = await fetch("data.json")
+    const response = await fetch(url)
     const data = await response.json()
     return fn(data)
   } catch (error) {
-    console.error("Could not find file")
+    console.error("Could not find file", error.message)
   }
 }
 // Display Members
