@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "formulahendry.auto-rename-tag",
+    "dbaeumer.vscode-eslint",
+    "github.vscode-github-actions",
+    "github.codespaces",
+    "xabikos.javascriptsnippets",
+    "ritwickdey.liveserver",
+    "esbenp.prettier-vscode",
+    "github.copilot",
+    "github.copilot-chat"
+  ]
+}
