@@ -20,7 +20,7 @@ document.getElementById("notification").remove()
 
 // Data Functions
 const getData = async (fn) => {
-  const url = "http://localhost:3003/get-data"
+  const url = "http://localhost:3000/get-data"
   try {
     const response = await fetch(url)
     const data = await response.json()
@@ -150,7 +150,7 @@ async function handleSubmit(event) {
 
 //CRUD Functions
 async function addNewMember(data) {
-  const url = "http://localhost:3003/add-data"
+  const url = "http://localhost:3000/add-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -178,7 +178,7 @@ async function addNewMember(data) {
   }
 }
 async function saveMember(data) {
-  const url = "http://localhost:3003/update-data"
+  const url = "http://localhost:3000/update-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -206,7 +206,7 @@ async function saveMember(data) {
   }
 }
 async function delMemberById(data) {
-  const url = "http://localhost:3003/delete-data"
+  const url = "http://localhost:3000/delete-data"
   try {
     const response = await fetch(url, {
       method: "POST",
