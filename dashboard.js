@@ -20,7 +20,7 @@ document.getElementById("notification").remove()
 
 // Data Functions
 const getData = async (fn) => {
-  const url = "http://localhost:3000/get-data"
+  const url = "https://dashboard-server-mocha.vercel.app/get-data"
   try {
     const response = await fetch(url)
     const data = await response.json()
@@ -150,7 +150,7 @@ async function handleSubmit(event) {
 
 //CRUD Functions
 async function addNewMember(data) {
-  const url = "http://localhost:3000/add-data"
+  const url = "https://dashboard-server-mocha.vercel.app/add-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -178,7 +178,7 @@ async function addNewMember(data) {
   }
 }
 async function saveMember(data) {
-  const url = "http://localhost:3000/update-data"
+  const url = "https://dashboard-server-mocha.vercel.app/update-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -206,7 +206,7 @@ async function saveMember(data) {
   }
 }
 async function delMemberById(data) {
-  const url = "http://localhost:3000/delete-data"
+  const url = "https://dashboard-server-mocha.vercel.app/delete-data"
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -228,6 +228,7 @@ async function delMemberById(data) {
     const message = jsonObject["message"]
     if (jsonObject["success"]) {
       addFlashNotification(message, "success", 800)
+      setTimeout(() => window.location.reload(), 1000)
     }
   } catch (error) {
     console.error(error.message)
@@ -264,7 +265,7 @@ function deleteMembers(e) {
   }
   //2. Retrieve id
   btn = document.querySelector("#deleteBtn")
-  btn.onclick = (e) => {
+  btn.addEventListener("click", (e) => {
     e.preventDefault()
     const response = confirm("Are you sure you want to delete")
     if (response) {
@@ -274,8 +275,7 @@ function deleteMembers(e) {
       //3. Send to server
       delMemberById({ id: memberId })
     }
-    setTimeout(() => window.location.reload(), 1000)
-  }
+  })
 }
 // Notification Feature
 function addFlashNotification(message, type = "info", duration = 5000) {
